@@ -20,6 +20,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.1")
+
+    implementation("de.exlll:configlib-yaml:4.5.0")
 }
 
 java {

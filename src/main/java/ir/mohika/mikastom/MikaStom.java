@@ -1,5 +1,6 @@
 package ir.mohika.mikastom;
 
+import ir.mohika.mikastom.config.ConfigManager;
 import ir.mohika.mikastom.listeners.PlayerJoinListener;
 import ir.mohika.mikastom.listeners.PlayerSkinListener;
 import net.minestom.server.MinecraftServer;
@@ -12,6 +13,7 @@ import net.minestom.server.instance.block.Block;
 
 public class MikaStom {
   public static void main(String[] args) {
+    new ConfigManager();
     MinecraftServer minecraftServer = MinecraftServer.init();
     InstanceManager instanceManager = MinecraftServer.getInstanceManager();
     InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
@@ -27,6 +29,6 @@ public class MikaStom {
     globalEventHandler.addListener(new PlayerSkinListener());
 
     // Start the server on port 25565
-    minecraftServer.start("0.0.0.0", 25565);
+    minecraftServer.start(ConfigManager.getServerConfig().getAddress());
   }
 }
