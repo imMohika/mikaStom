@@ -1,17 +1,12 @@
 package ir.mohika.mikastom.api.ashcon;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import ir.mohika.mikastom.api.mineskin.responses.UUIDApiResponse;
 import ir.mohika.mikastom.http.HttpClient;
-import ir.mohika.mikastom.utils.UUIDUtils;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
 public class AshconApi {
   public static Optional<AshconApiResponse> getPlayer(String username) {

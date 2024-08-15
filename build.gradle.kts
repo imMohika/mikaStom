@@ -22,6 +22,8 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.1")
 
     implementation("de.exlll:configlib-yaml:4.5.0")
+
+    implementation("net.kyori:adventure-text-minimessage:4.17.0")
 }
 
 java {

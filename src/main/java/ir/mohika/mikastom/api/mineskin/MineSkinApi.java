@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import ir.mohika.mikastom.api.mineskin.responses.UUIDApiResponse;
 import ir.mohika.mikastom.http.HttpClient;
 import ir.mohika.mikastom.utils.UUIDUtils;
-import net.minestom.server.entity.Player;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -29,7 +28,6 @@ public class MineSkinApi {
           return Optional.empty();
         }
 
-        ;
         UUID uuid = UUID.fromString(UUIDUtils.formatUUID(apiResponse.getUuid()));
         return Optional.of(uuid);
       }
