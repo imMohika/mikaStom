@@ -1,8 +1,13 @@
 package ir.mohika.mikastom.minigames;
 
 import ir.mohika.mikastom.MikaStomServer;
-import ir.mohika.mikastom.commands.BaseRootCommand;
 import ir.mohika.mikastom.minigames.events.MinigamePlayerEvent;
+import ir.mohika.mikastom.utils.Log;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
@@ -15,8 +20,6 @@ import net.minestom.server.instance.InstanceContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public abstract class Minigame {
   public @NotNull EventNode<Event> eventNode;
 
@@ -24,10 +27,31 @@ public abstract class Minigame {
 
   @Nullable @Getter @Setter private MikaStomServer server;
 
+  @Getter private final Path dataDir;
+
   protected Minigame(@Nullable MikaStomServer server) {
     this.server = server;
+    this.dataDir = Path.of("./" + getName());
 
-    instances = initInstances();
+    if (!Files.exists(dataDir)) {
+      try {
+        Files.createDirectories(dataDir);
+        Files.createDirectories(Path.of(dataDir.toString(), "world"));
+        Files.createDirectories(Path.of(dataDir.toString(), "config"));
+      } catch (IOException e) {
+        Log.getLogger().error("Failed to create data folder for {}", getName());
+        throw new RuntimeException(e);
+      }
+    }
+
+    instances = new ArrayList<>();
+
+    try {
+      instances = initInstances();
+    } catch (IOException e) {
+      Log.getLogger().error("Failed to load instances for {}", getName());
+      throw new RuntimeException(e);
+    }
 
     eventNode =
         EventNode.event(
@@ -51,12 +75,12 @@ public abstract class Minigame {
 
   public abstract String getName();
 
-  protected abstract List<InstanceContainer> initInstances();
+  protected abstract List<InstanceContainer> initInstances() throws IOException;
 
   protected abstract Command initCommands(Command rootCommand);
 
   protected void registerCommands() {
-    MinecraftServer.getCommandManager()
-        .register(this.initCommands(new BaseRootCommand(this.getName())));
+    //    MinecraftServer.getCommandManager()
+    //        .register(this.initCommands(new BaseRootCommand(this.getName())));
   }
 }

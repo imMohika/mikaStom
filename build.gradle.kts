@@ -9,6 +9,7 @@ version = "0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://repo.panda-lang.org/releases")
 }
 
 dependencies {
@@ -24,6 +25,11 @@ dependencies {
     implementation("de.exlll:configlib-yaml:4.5.0")
 
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
+
+    implementation("dev.rollczi:litecommands-minestom:3.4.3")
+
+    implementation("dev.hollowcube:schem:1.2.0")
+    implementation("dev.hollowcube:polar:1.11.1")
 }
 
 java {
@@ -49,4 +55,8 @@ tasks {
         // Prevent the -all suffix on the shadowjar file.
         archiveClassifier.set("")
     }
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters")
 }

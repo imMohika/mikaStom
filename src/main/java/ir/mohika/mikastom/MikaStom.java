@@ -1,15 +1,17 @@
 package ir.mohika.mikastom;
 
-import ir.mohika.mikastom.commands.GameModeCommand;
-import ir.mohika.mikastom.commands.OnlineListCommand;
-import ir.mohika.mikastom.commands.StopCommand;
+import dev.rollczi.litecommands.minestom.LiteMinestomFactory;
+import ir.mohika.mikastom.command.commands.GameModeCommand;
+import ir.mohika.mikastom.command.commands.ListCommand;
+import ir.mohika.mikastom.command.commands.StopCommand;
+import ir.mohika.mikastom.command.commands.UpCommand;
 import ir.mohika.mikastom.config.ConfigManager;
 import ir.mohika.mikastom.listeners.PlayerChatListener;
+import ir.mohika.mikastom.listeners.PlayerCommandListener;
 import ir.mohika.mikastom.listeners.PlayerJoinListener;
 import ir.mohika.mikastom.listeners.PlayerSkinListener;
 import ir.mohika.mikastom.minigames.hub.HubMinigame;
 import lombok.Getter;
-import net.minestom.server.MinecraftServer;
 
 public class MikaStom {
   @Getter private static MikaStomServer server;
@@ -22,12 +24,14 @@ public class MikaStom {
             .address(ConfigManager.getServerConfig().getAddress())
             .globalEvent(new PlayerJoinListener())
             .globalEvent(new PlayerSkinListener())
+            .globalEvent(new PlayerCommandListener())
             .globalEvent(new PlayerChatListener())
             .buildAndStart();
-    server.addMinigame(new HubMinigame(server));
 
-    MinecraftServer.getCommandManager().register(new StopCommand());
-    MinecraftServer.getCommandManager().register(new GameModeCommand());
-    MinecraftServer.getCommandManager().register(new OnlineListCommand());
+    LiteMinestomFactory.builder()
+        .commands(new StopCommand(), new UpCommand(), new ListCommand(), new GameModeCommand())
+        .build();
+
+    server.addMinigame(new HubMinigame(server));
   }
 }

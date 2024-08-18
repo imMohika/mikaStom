@@ -1,20 +1,24 @@
 package ir.mohika.mikastom.minigames.hub;
 
+import dev.rollczi.litecommands.minestom.LiteMinestomFactory;
 import ir.mohika.mikastom.MikaStomServer;
 import ir.mohika.mikastom.constants.Tags;
 import ir.mohika.mikastom.minigames.Minigame;
+import ir.mohika.mikastom.minigames.hub.commands.HubCommands;
 import ir.mohika.mikastom.minigames.hub.listeners.HubPlayerJoin;
 import ir.mohika.mikastom.minigames.player.MinigamePlayer;
+import ir.mohika.mikastom.utils.Log;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
+import net.hollowcube.polar.PolarLoader;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
-import net.minestom.server.instance.block.Block;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HubMinigame extends Minigame {
   @Getter private static HubMinigame instance;
@@ -23,6 +27,8 @@ public class HubMinigame extends Minigame {
     super(server);
 
     eventNode.addListener(new HubPlayerJoin());
+
+    LiteMinestomFactory.builder().commands(new HubCommands()).build();
   }
 
   @Override
@@ -31,14 +37,15 @@ public class HubMinigame extends Minigame {
   }
 
   @Override
-  protected List<InstanceContainer> initInstances() {
+  protected List<InstanceContainer> initInstances() throws IOException {
     List<InstanceContainer> instances = new ArrayList<>();
     // just create one instance for now
     InstanceContainer instanceContainer =
         MinecraftServer.getInstanceManager().createInstanceContainer();
 
-    // Let there be land
-    instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
+    Log.getLogger().info("Loading Hub World");
+    instanceContainer.setChunkLoader(new PolarLoader(Path.of("./hub/world/hub.polar")));
+    instanceContainer.setTimeRate(0);
 
     // Let there be light
     instanceContainer.setChunkSupplier(LightingChunk::new);

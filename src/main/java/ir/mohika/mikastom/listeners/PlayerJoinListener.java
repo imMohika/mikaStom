@@ -2,11 +2,11 @@ package ir.mohika.mikastom.listeners;
 
 import ir.mohika.mikastom.MikaStom;
 import ir.mohika.mikastom.config.ConfigManager;
-import ir.mohika.mikastom.constants.Permissions;
 import ir.mohika.mikastom.constants.Tags;
 import ir.mohika.mikastom.minigames.Minigame;
 import ir.mohika.mikastom.minigames.player.MinigamePlayer;
 import ir.mohika.mikastom.utils.Log;
+import java.util.Optional;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -16,9 +16,9 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 public class PlayerJoinListener implements EventListener<AsyncPlayerConfigurationEvent> {
   @Override
@@ -50,9 +50,10 @@ public class PlayerJoinListener implements EventListener<AsyncPlayerConfiguratio
                 Placeholder.component("player", player.getName()));
     Audiences.players().sendMessage(joinMessage);
 
-    event.setSpawningInstance(hubMinigame.getInstances().getFirst());
+    InstanceContainer hubInstance = hubMinigame.getInstances().getFirst();
+    event.setSpawningInstance(hubInstance);
 
-    Pos respawnPoint = hubMinigame.getInstances().getFirst().getTag(Tags.getSpawnPos());
+    Pos respawnPoint = hubInstance.getTag(Tags.getSpawnPos());
     player.setRespawnPoint(respawnPoint);
 
     player.setCurrentMinigame("hub");
@@ -61,7 +62,7 @@ public class PlayerJoinListener implements EventListener<AsyncPlayerConfiguratio
         .getOperators()
         .contains(player.getUsername().toLowerCase())) {
       Log.getLogger().info("OP Player Joined {}", player.getUsername());
-      player.addPermission(Permissions.getOperator());
+      player.addPermission(new Permission("*"));
     } else {
       Log.getLogger().info("{} Joined", player.getUsername());
     }
