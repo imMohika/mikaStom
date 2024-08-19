@@ -1,7 +1,7 @@
-package ir.mohika.mikastom.listeners;
+package ir.mohika.mikastom.module.modules.core.listeners;
 
+import ir.mohika.mikastom.core.utils.Log;
 import ir.mohika.mikastom.minigames.player.MinigamePlayer;
-import ir.mohika.mikastom.utils.Log;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import org.jetbrains.annotations.NotNull;

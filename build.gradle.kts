@@ -10,6 +10,8 @@ version = "0.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://repo.panda-lang.org/releases")
+    maven("https://repo.emortal.dev/snapshots")
+    maven("https://repo.emortal.dev/releases")
 }
 
 dependencies {
@@ -30,6 +32,10 @@ dependencies {
 
     implementation("dev.hollowcube:schem:1.2.0")
     implementation("dev.hollowcube:polar:1.11.1")
+
+    implementation("dev.emortal.api:module-system:1.0.0")
+   
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }
 
 java {

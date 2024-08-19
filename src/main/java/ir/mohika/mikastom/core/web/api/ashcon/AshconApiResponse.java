@@ -1,4 +1,4 @@
-package ir.mohika.mikastom.api.ashcon;
+package ir.mohika.mikastom.core.web.api.ashcon;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

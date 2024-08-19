@@ -8,11 +8,12 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 @Command(name = "up")
 public class UpCommand {
   @Execute
-  public void execute(@Context Player player, @Arg int number) {
+  public void execute(@Context @NotNull Player player, @Arg int number) {
     Pos currPos = player.getPosition();
     Pos newPos = currPos.add(0, number, 0);
     Pos blockPos = currPos.add(0, number - 1, 0);

@@ -1,4 +1,4 @@
-package ir.mohika.mikastom.api.mineskin.responses;
+package ir.mohika.mikastom.core.web.api.mineskin.responses;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

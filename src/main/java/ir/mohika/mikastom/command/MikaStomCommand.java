@@ -5,12 +5,13 @@ import ir.mohika.mikastom.minigames.player.MinigamePlayer;
 import lombok.Getter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 public abstract class MikaStomCommand {
   private final CommandInfo info;
   private final String name;
-  private final MinestomCommand command;
+  private final @NotNull MinestomCommand command;
 
   protected MikaStomCommand() {
     this.info = this.getClass().getAnnotation(CommandInfo.class);

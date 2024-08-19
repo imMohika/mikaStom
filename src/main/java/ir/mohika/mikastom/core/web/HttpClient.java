@@ -1,4 +1,4 @@
-package ir.mohika.mikastom.http;
+package ir.mohika.mikastom.core.web;
 
 import lombok.Getter;
 import okhttp3.OkHttpClient;

@@ -6,14 +6,24 @@ import dev.rollczi.litecommands.annotations.execute.Execute;
 import ir.mohika.mikastom.MikaStom;
 import ir.mohika.mikastom.minigames.Minigame;
 import java.util.Optional;
+
+import ir.mohika.mikastom.minigames.player.MinigamePlayer;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import org.jetbrains.annotations.NotNull;
 
 @Command(name = "hub")
 public class HubCommands {
 
+  @Execute
+  void execute(@Context Player player) {
+    ((MinigamePlayer) player).sendToHub();
+  }
+
   @Execute(name = "save")
+  @NotNull
   Component executeSave(@Context CommandSender sender) {
     Optional<Minigame> hubOptional = MikaStom.getServer().getMinigameByName("hub");
     if (hubOptional.isEmpty()) {

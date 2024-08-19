@@ -7,7 +7,7 @@ public class MinigamePlayerJoinEvent implements MinigamePlayerEvent {
   private final String minigame;
   private final MinigamePlayer player;
 
-  public MinigamePlayerJoinEvent(String minigame, MinigamePlayer player) {
+  public MinigamePlayerJoinEvent(String minigame, @NotNull MinigamePlayer player) {
     this.minigame = minigame;
     this.player = player;
 

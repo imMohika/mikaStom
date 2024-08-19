@@ -6,11 +6,12 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 @Command(name = "gamemode", aliases = "gm")
 public class GameModeCommand {
   @Execute
-  public void execute(@Context Player player, @Arg GameMode gameMode) {
+  public void execute(@Context @NotNull Player player, @Arg GameMode gameMode) {
     player.setGameMode(gameMode);
   }
 }

@@ -1,8 +1,8 @@
 package ir.mohika.mikastom.minigames;
 
 import ir.mohika.mikastom.MikaStomServer;
+import ir.mohika.mikastom.core.utils.Log;
 import ir.mohika.mikastom.minigames.events.MinigamePlayerEvent;
-import ir.mohika.mikastom.utils.Log;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,7 +11,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.builder.Command;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -27,7 +26,7 @@ public abstract class Minigame {
 
   @Nullable @Getter @Setter private MikaStomServer server;
 
-  @Getter private final Path dataDir;
+  @Getter private final @NotNull Path dataDir;
 
   protected Minigame(@Nullable MikaStomServer server) {
     this.server = server;
@@ -69,18 +68,9 @@ public abstract class Minigame {
               return false;
             });
     MinecraftServer.getGlobalEventHandler().addChild(eventNode);
-
-    registerCommands();
   }
 
   public abstract String getName();
 
   protected abstract List<InstanceContainer> initInstances() throws IOException;
-
-  protected abstract Command initCommands(Command rootCommand);
-
-  protected void registerCommands() {
-    //    MinecraftServer.getCommandManager()
-    //        .register(this.initCommands(new BaseRootCommand(this.getName())));
-  }
 }

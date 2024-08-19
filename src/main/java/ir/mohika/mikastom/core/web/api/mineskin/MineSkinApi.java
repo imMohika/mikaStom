@@ -1,18 +1,19 @@
-package ir.mohika.mikastom.api.mineskin;
+package ir.mohika.mikastom.core.web.api.mineskin;
 
 import com.google.gson.Gson;
-import ir.mohika.mikastom.api.mineskin.responses.UUIDApiResponse;
-import ir.mohika.mikastom.http.HttpClient;
-import ir.mohika.mikastom.utils.UUIDUtils;
-import okhttp3.Request;
-import okhttp3.Response;
-
+import ir.mohika.mikastom.core.utils.Log;
+import ir.mohika.mikastom.core.utils.UUIDUtils;
+import ir.mohika.mikastom.core.web.HttpClient;
+import ir.mohika.mikastom.core.web.api.mineskin.responses.UUIDApiResponse;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 
 public class MineSkinApi {
-  public static Optional<UUID> getPlayerUUID(String username) {
+  public static @NotNull Optional<UUID> getPlayerUUID(String username) {
     Request request =
         new Request.Builder().url("https://api.mineskin.org/validate/name/" + username).build();
     try (Response response = HttpClient.getClient().newCall(request).execute()) {
@@ -32,7 +33,7 @@ public class MineSkinApi {
         return Optional.of(uuid);
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      Log.getLogger().error("Error getting {}'s skin from mineskin", username, e);
     }
 
     return Optional.empty();

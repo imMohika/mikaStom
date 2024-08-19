@@ -1,4 +1,4 @@
-package ir.mohika.mikastom.api.minetools;
+package ir.mohika.mikastom.core.web.api.minetools;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

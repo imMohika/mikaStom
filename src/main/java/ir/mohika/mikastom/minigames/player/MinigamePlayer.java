@@ -3,12 +3,12 @@ package ir.mohika.mikastom.minigames.player;
 import ir.mohika.mikastom.constants.Tags;
 import ir.mohika.mikastom.minigames.events.MinigamePlayerJoinEvent;
 import ir.mohika.mikastom.minigames.events.MinigamePlayerLeaveEvent;
+import java.util.UUID;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
+import org.jetbrains.annotations.Nullable;
 
 public class MinigamePlayer extends Player {
   public MinigamePlayer(
@@ -16,7 +16,7 @@ public class MinigamePlayer extends Player {
     super(uuid, username, playerConnection);
   }
 
-  public String getCurrentMinigame() {
+  public @Nullable String getCurrentMinigame() {
     return this.getTag(Tags.getMinigame());
   }
 
@@ -25,13 +25,15 @@ public class MinigamePlayer extends Player {
   }
 
   public void sendToHub() {
-    if (this.getCurrentMinigame().equalsIgnoreCase("hub")) {
-      this.teleport(this.getInstance().getTag(Tags.getSpawnPos()));
-      return;
+    if (this.getCurrentMinigame() != null) {
+      if (this.getCurrentMinigame().equalsIgnoreCase("hub")) {
+        this.teleport(this.getInstance().getTag(Tags.getSpawnPos()));
+        return;
+      }
+      MinecraftServer.getGlobalEventHandler()
+          .call(new MinigamePlayerLeaveEvent(this.getCurrentMinigame(), this));
     }
 
-    MinecraftServer.getGlobalEventHandler()
-        .call(new MinigamePlayerLeaveEvent(this.getCurrentMinigame(), this));
     MinecraftServer.getGlobalEventHandler().call(new MinigamePlayerJoinEvent("hub", this));
   }
 }

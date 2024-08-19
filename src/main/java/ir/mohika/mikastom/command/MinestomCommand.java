@@ -3,9 +3,10 @@ package ir.mohika.mikastom.command;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
+import org.jetbrains.annotations.NotNull;
 
 public class MinestomCommand extends Command {
-  public MinestomCommand(MikaStomCommand command) {
+  public MinestomCommand(@NotNull MikaStomCommand command) {
     super(command.getName(), command.getInfo().aliases().split(" "));
 
     setDefaultExecutor(

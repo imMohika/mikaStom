@@ -1,10 +1,9 @@
-package ir.mohika.mikastom.utils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package ir.mohika.mikastom.core.utils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Log {
   private static final Map<String, Logger> loggerCache = new ConcurrentHashMap<>();

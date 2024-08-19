@@ -1,29 +1,53 @@
 package ir.mohika.mikastom;
 
+import dev.emortal.api.modules.LoadableModule;
+import dev.emortal.api.modules.Module;
+import dev.emortal.api.modules.ModuleManager;
+import ir.mohika.mikastom.core.utils.Log;
 import ir.mohika.mikastom.minigames.Minigame;
 import ir.mohika.mikastom.minigames.player.MinigamePlayer;
-import ir.mohika.mikastom.utils.Log;
-import lombok.NoArgsConstructor;
+import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import lombok.Getter;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventListener;
-import net.minestom.server.event.EventNode;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.SocketAddress;
-import java.util.*;
-
-@NoArgsConstructor
 public class MikaStomServer {
   private final List<Minigame> minigames = new ArrayList<>();
 
-  public void addMinigame(Minigame minigame) {
+  private final SocketAddress address;
+  @Getter private final @NotNull MinecraftServer server;
+  @Getter private final @NotNull ModuleManager moduleManager;
+
+  private MikaStomServer(@NotNull Builder builder) {
+    this.address = builder.address;
+    this.server = MinecraftServer.init();
+    this.moduleManager = builder.moduleManagerBuilder.build();
+    MinecraftServer.getSchedulerManager().buildShutdownTask(this.moduleManager::onUnload);
+    MinecraftServer.getConnectionManager().setPlayerProvider(MinigamePlayer::new);
+  }
+
+  public void start() {
+    if (MikaStom.getServer().getMinigameByName("hub").isEmpty()) {
+      Log.getLogger().error("Could not find minigame with name 'hub'. Stopping server...");
+      MinecraftServer.stopCleanly();
+      return;
+    }
+
+    this.server.start(address);
+    this.moduleManager.onReady();
+    Log.getLogger().info("Listening on {}", address);
+  }
+
+  public void addMinigame(@NotNull Minigame minigame) {
     minigame.setServer(this);
     minigames.add(minigame);
     Log.getLogger().info("Added {} minigame", minigame.getName());
   }
 
-  public Optional<Minigame> getMinigameByName(@NotNull String name) {
+  public @NotNull Optional<Minigame> getMinigameByName(@NotNull String name) {
     return minigames.stream()
         .filter(m -> m.getName().equalsIgnoreCase(name))
         .findFirst()
@@ -34,49 +58,37 @@ public class MikaStomServer {
             });
   }
 
-  public static List<MinigamePlayer> getOnlinePlayers() {
+  public static @NotNull List<MinigamePlayer> getOnlinePlayers() {
     return MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
         .filter(player -> player.getInstance() != null)
         .map(MinigamePlayer.class::cast)
         .toList();
   }
 
-  public static Builder builder() {
+  public static @NotNull Builder builder() {
     return new Builder();
   }
 
   public static class Builder {
-    private final EventNode<Event> globalEvents = EventNode.all("globalListeners");
-
     private SocketAddress address;
+    private final ModuleManager.Builder moduleManagerBuilder = ModuleManager.builder();
 
-    public Builder globalEvent(EventListener<?> listener) {
-      globalEvents.addListener(listener);
-      return this;
-    }
-
-    public Builder address(SocketAddress address) {
+    public @NotNull Builder address(SocketAddress address) {
       this.address = address;
       return this;
     }
 
-    public void setupServer() {
+    public @NotNull Builder module(
+        @NotNull Class<? extends Module> clazz, @NotNull LoadableModule.Creator moduleCreator) {
+      this.moduleManagerBuilder.module(clazz, moduleCreator);
+      return this;
+    }
+
+    public @NotNull MikaStomServer build() {
       if (address == null) {
         throw new IllegalStateException("Address must be set");
       }
-
-      MinecraftServer minecraftServer = MinecraftServer.init();
-      MinecraftServer.getGlobalEventHandler().addChild(globalEvents);
-
-      MinecraftServer.getConnectionManager().setPlayerProvider(MinigamePlayer::new);
-
-      minecraftServer.start(address);
-      Log.getLogger().info("Listening on {}", address);
-    }
-
-    public MikaStomServer buildAndStart() {
-      this.setupServer();
-      return new MikaStomServer();
+      return new MikaStomServer(this);
     }
   }
 }

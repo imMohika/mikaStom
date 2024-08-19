@@ -1,15 +1,16 @@
-package ir.mohika.mikastom.api.ashcon;
+package ir.mohika.mikastom.core.web.api.ashcon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.mohika.mikastom.http.HttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
+import ir.mohika.mikastom.core.utils.Log;
+import ir.mohika.mikastom.core.web.HttpClient;
 import java.io.IOException;
 import java.util.Optional;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 
 public class AshconApi {
-  public static Optional<AshconApiResponse> getPlayer(String username) {
+  public static @NotNull Optional<AshconApiResponse> getPlayer(String username) {
     System.out.println("requesting player skin");
     Request request =
         new Request.Builder().url("https://api.ashcon.app/mojang/v2/user/" + username).build();
@@ -27,7 +28,7 @@ public class AshconApi {
         return Optional.of(apiResponse);
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      Log.getLogger().error("Error getting {}'s skin from ashcon", username, e);
     }
 
     return Optional.empty();

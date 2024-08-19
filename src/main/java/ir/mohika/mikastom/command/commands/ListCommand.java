@@ -8,11 +8,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 @Command(name = "list", aliases = "online")
 public class ListCommand {
   @Execute
-  public void execute(@Context CommandSender sender) {
+  public void execute(@Context @NotNull CommandSender sender) {
     sender.sendMessage(
         Component.join(
             JoinConfiguration.commas(true),
