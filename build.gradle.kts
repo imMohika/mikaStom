@@ -34,8 +34,12 @@ dependencies {
     implementation("dev.hollowcube:polar:1.11.1")
 
     implementation("dev.emortal.api:module-system:1.0.0")
-   
+
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+
+    implementation("com.h2database:h2:2.3.232")
+
+    implementation("org.xerial:sqlite-jdbc:3.46.1.0")
 }
 
 java {
